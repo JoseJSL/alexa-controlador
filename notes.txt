@@ -1,0 +1,1 @@
+gcloud functions add-iam-policy-binding alexa --member="allUsers" --role="roles/cloudfunctions.invoker"
