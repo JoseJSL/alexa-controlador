@@ -2,6 +2,8 @@ import * as functions from "firebase-functions";
 import { SkillBuilders, } from "ask-sdk-core";
 import { SkillRequestSignatureVerifier, TimestampVerifier } from "ask-sdk-express-adapter";
 import { cancelAndStopIntentHandler, errorHandler, helpIntentHandler, launchRequestHandler, sessionEndedRequestHandler } from './base-request';
+import { ActivateIntent } from "./controls/activate-request";
+import { DeactivateIntent } from "./controls/deactivate-request";
 
 const skill = SkillBuilders.custom()
     .addRequestHandlers(
@@ -9,6 +11,8 @@ const skill = SkillBuilders.custom()
         helpIntentHandler,
         cancelAndStopIntentHandler,
         sessionEndedRequestHandler,
+        ActivateIntent,
+        DeactivateIntent,
     )
     .addErrorHandlers(errorHandler)
 .create();

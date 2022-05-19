@@ -3,8 +3,7 @@ import { Response } from 'ask-sdk-model';
 
 export const launchRequestHandler : RequestHandler = {
     canHandle(handlerInput : HandlerInput) : boolean {
-      const request = handlerInput.requestEnvelope.request;
-      return request.type === 'LaunchRequest';        
+      return handlerInput.requestEnvelope.request.type === 'LaunchRequest';        
     },
     handle(handlerInput : HandlerInput) : Response {
       const speechText = 'Te escucho.';      
@@ -38,7 +37,7 @@ export const cancelAndStopIntentHandler : RequestHandler = {
     },
     handle(handlerInput : HandlerInput) : Response {
       return handlerInput.responseBuilder
-        .speak('Hasta luego, chefsito')
+        .speak('Hasta luego.')
         .withShouldEndSession(true)      
         .getResponse();
     },
@@ -58,9 +57,9 @@ export const helpIntentHandler : RequestHandler = {
 
 export const sessionEndedRequestHandler : RequestHandler = {
     canHandle(handlerInput : HandlerInput) : boolean {
-      return getIntentName(handlerInput.requestEnvelope) === 'SessionEndedRequest';
+      return handlerInput.requestEnvelope.request.type === 'SessionEndedRequest';
     },
     handle(handlerInput : HandlerInput) : Response {  
-      return handlerInput.responseBuilder.withShouldEndSession(true).getResponse();
+      return handlerInput.responseBuilder.speak('Hasta luego.').withShouldEndSession(true).getResponse();
     },
 };
