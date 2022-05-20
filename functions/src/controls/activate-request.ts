@@ -1,5 +1,6 @@
 import { getIntentName, getSlotValue, HandlerInput, RequestHandler } from 'ask-sdk-core';
 import { Response } from 'ask-sdk-model';
+import { getErrorSpeech, parseData } from '../util/parser';
 
 export const ActivateIntent : RequestHandler = {
     canHandle(handlerInput : HandlerInput) : boolean {
@@ -9,16 +10,18 @@ export const ActivateIntent : RequestHandler = {
         let speechText: string;
         const device = getSlotValue(handlerInput.requestEnvelope, 'device');  
         const number = getSlotValue(handlerInput.requestEnvelope, 'number');
-        let location = getSlotValue(handlerInput.requestEnvelope, 'location');  
+        const location = getSlotValue(handlerInput.requestEnvelope, 'location');  
 
-        console.log(`On activation: Device: ${device}, Location: ${location}, Number: ${number}`);
-
-        if(number && location){
-            location += ' ' + number;
-        }
-        
-        if(device && location){
-            speechText = `Activando ${device} en ${location}.`;
+        if(device && location && number){
+            try{
+                const data = parseData(device, location, number, true);
+                speechText = `Activando ${data.Device} en ${data.FullLocation}.`;
+                
+                console.log(`On activation: Device: ${device}, Location: ${location}, Number: ${number}`);   
+            } catch(e){
+                speechText = getErrorSpeech(e as any);
+                console.log(`Error on activation: Device: ${device}, Location: ${location}, Number: ${number}`);   
+            }
         } else {
             speechText = 'Lo siento, no pude ententerte';
         }

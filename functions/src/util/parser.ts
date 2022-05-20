@@ -1,8 +1,16 @@
 import { LocationList } from "./devices";
 
-type ErrorMessage = 'location not found' | 'device not found on location' | 'device not found';
+export interface ParsedData{
+    Device: string,
+    FullLocation: string,
+    PIN?: number,
+}
 
-export function getErrorSpeech(errorMessage: ErrorMessage): string{
+export type ErrorMessage = 'location not found' | 'device not found on location' | 'device not found' | 'number not valid';
+
+export function getErrorSpeech(error: Error): string{
+    const errorMessage: ErrorMessage = error.message as ErrorMessage;
+
     if(errorMessage === 'device not found'){
         return 'Lo siento, no encontré ningún dispositivo con ése nombre.';
     } else if(errorMessage === 'location not found'){
@@ -14,24 +22,21 @@ export function getErrorSpeech(errorMessage: ErrorMessage): string{
     return 'Lo siento, no pude entenderte.';
 }
 
-export function parsePIN(device: string, location: string, number: string, parse?: 'device' | 'location' | 'both'): number{
-    if(parse){
-        if(parse === 'both' || parse === 'device'){
-            device = parseDevice(device);
-        }
+export function parseData(device: string, location: string, number: string, assertPIN?: boolean): ParsedData{
+    let data:ParsedData = {
+        Device: parseDevice(device),
+        FullLocation: parseLocation(location, number),
+    };
 
-        if(parse === 'both' || parse === 'location'){
-            location = parseLocation(location, number);
-        }
-    }
-
-    if(!LocationList[location]){
+    if(assertPIN && !LocationList[data.FullLocation]){
         throw new Error('location not found');
-    } else if(!LocationList[location].Devices[device]){
+    } else if(assertPIN && !LocationList[data.FullLocation].Devices[data.Device]){
         throw new Error('device not found on location');
     }
 
-    return LocationList[location].Devices[device].PIN;
+    data.PIN = LocationList[data.FullLocation].Devices[data.Device].PIN;
+
+    return data;
 }
 
 function parseDevice(device: string): string{

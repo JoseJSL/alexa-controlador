@@ -1,5 +1,6 @@
 import { getIntentName, getSlotValue, HandlerInput, RequestHandler } from 'ask-sdk-core';
 import { Response } from 'ask-sdk-model';
+import { getErrorSpeech, parseData, ParsedData } from '../util/parser';
 
 export const DeactivateIntent : RequestHandler = {
     canHandle(handlerInput : HandlerInput) : boolean {
@@ -8,17 +9,19 @@ export const DeactivateIntent : RequestHandler = {
     handle(handlerInput : HandlerInput) : Response {
         let speechText: string;
         const device = getSlotValue(handlerInput.requestEnvelope, 'device');  
+        const location = getSlotValue(handlerInput.requestEnvelope, 'location');  
         const number = getSlotValue(handlerInput.requestEnvelope, 'number');
-        let location = getSlotValue(handlerInput.requestEnvelope, 'location');  
 
-        console.log(`On deactivation: Device: ${device}, Location: ${location}, Number: ${number}`);
-
-        if(number && location){
-            location += ' ' + number;
-        }
-        
-        if(device && location){
-            speechText = `Desactivando ${device} en ${location}.`;
+        if(device && location && number){
+            try{
+                const data: ParsedData = parseData(device, location, number, true);
+                speechText = `Desactivando ${data.Device} en ${data.FullLocation}.`;
+                
+                console.log(`Deactivating: Device: ${device}, Location: ${location}, Number: ${number}`);
+            } catch(e){
+                console.log(`Error on deactivation: Device: ${device}, Location: ${location}, Number: ${number}`);
+                speechText = getErrorSpeech(e as any);
+            }
         } else {
             speechText = 'Lo siento, no pude ententerte';
         }

@@ -10,7 +10,7 @@ interface Locations{
     }
 }
 
-export let LocationList: Locations = {
+export const LocationList: Locations = {
     ['centro de cómputo 1']: {
         Devices: {
             ['luces']: {PIN: 1},
