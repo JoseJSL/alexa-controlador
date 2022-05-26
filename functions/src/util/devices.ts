@@ -13,7 +13,7 @@ interface Locations{
 export const LocationList: Locations = {
     ['centro de cómputo 1']: {
         Devices: {
-            ['luces']: {PIN: 1},
+            ['luces']: {PIN: 27},
             ['puertas']: {PIN: 2},
             ['aires acondicionados']: {PIN: 3},
         }
