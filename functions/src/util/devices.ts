@@ -36,6 +36,12 @@ export const LocationList: Locations = {
         }   
     },
 
+    ['aula 1']: {
+        Devices: {
+            ['luces']: {PIN: 2},
+        }   
+    },
+
     ['aula 9']: {
         Devices: {
             ['luces']: {PIN: 10},
@@ -52,3 +58,4 @@ export const LocationList: Locations = {
         }   
     },
 }
+

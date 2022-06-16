@@ -17,14 +17,12 @@ export const DeactivateIntent : RequestHandler = {
         if(device && location && number){
             try{
                 const data: ParsedData = parseData(device, location, number, true);
+                await alertPIN(data.PIN!, 'off');
                 speechText = `Desactivando ${data.Device} en ${data.FullLocation}.`;
-                response.withSimpleCard('Activación', await alertPIN(data.PIN!, 'off'));
                 console.log(`Deactivating: Device: ${device}, Location: ${location}, Number: ${number}`);
             } catch(e){
-                console.error(e);
-                console.log(`Error on deactivation: Device: ${device}, Location: ${location}, Number: ${number}`);
+                console.error(`Error on deactivation: Device: ${device}, Location: ${location}, Number: ${number}:::` + e);
                 speechText = getErrorSpeech(e as any);
-                response.withSimpleCard('Desactivación', speechText);
             }
         } else {
             speechText = 'Lo siento, no pude ententerte';
@@ -32,6 +30,7 @@ export const DeactivateIntent : RequestHandler = {
 
         return response
           .speak(speechText)
+          .withSimpleCard('Desactivación', speechText)
           .withShouldEndSession(false)      
           .getResponse();
     },

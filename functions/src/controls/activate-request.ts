@@ -12,27 +12,24 @@ export const ActivateIntent : RequestHandler = {
         const device = getSlotValue(handlerInput.requestEnvelope, 'device');  
         const number = getSlotValue(handlerInput.requestEnvelope, 'number');
         const location = getSlotValue(handlerInput.requestEnvelope, 'location');  
-        const response = handlerInput.responseBuilder;
 
         if(device && location && number){
             try{
                 const data = parseData(device, location, number, true);
-                speechText = `Activando ${data.Device} en ${data.FullLocation}. Utilizando el PIN ${data.PIN!}`;
-                response.withSimpleCard('Activación', await alertPIN(data.PIN!, 'on'));
-
+                await alertPIN(data.PIN!, 'on');
+                speechText = `Activado ${data.Device} en ${data.FullLocation}.`;
                 console.log(`On activation: Device: ${device}, Location: ${location}, Number: ${number}`);   
             } catch(e){
                 speechText = getErrorSpeech(e as any);
-                response.withSimpleCard('Activación', speechText)
-                console.log(`Error on activation: Device: ${device}, Location: ${location}, Number: ${number}`);   
-                console.error(e);
+                console.error(`Error on activation: Device: ${device}, Location: ${location}, Number: ${number}::: `+ e);   
             }
         } else {
-            speechText = 'Lo siento, no pude ententerte';
+            speechText = 'Lo siento, no pude ententerte.';
         }
 
-        return response
+        return handlerInput.responseBuilder
           .speak(speechText)
+          .withSimpleCard('Activación', speechText)
           .withShouldEndSession(false)      
           .getResponse();
     },

@@ -6,10 +6,10 @@ export interface ParsedData{
     PIN?: number,
 }
 
-export type ErrorMessage = 'location not found' | 'device not found on location' | 'device not found' | 'number not valid';
+export type ErrorMessage = 'location not found' | 'device not found on location' | 'device not found' | 'number not valid' | 'client not available' | 'unknown';
 
 export function getErrorSpeech(error: Error): string{
-    const errorMessage: ErrorMessage = error.message as ErrorMessage;
+    const errorMessage: ErrorMessage = error.message ? error.message as ErrorMessage : 'unknown';
 
     if(errorMessage === 'device not found'){
         return 'Lo siento, no encontré ningún dispositivo con ése nombre.';
@@ -17,6 +17,8 @@ export function getErrorSpeech(error: Error): string{
         return 'Lo siento, no encontré ningún lugar con ése nombre.'
     } else if(errorMessage === 'device not found on location'){
         return 'Lo siento, no encontré ningún dispositivo en ése lugar.';
+    } else if(errorMessage == 'client not available'){
+        return 'Lo siento, no pude conectarme con el cliente. Vuelve a intentarlo más tarde';
     }
 
     return 'Lo siento, no pude entenderte.';
@@ -41,12 +43,13 @@ export function parseData(device: string, location: string, number: string, asse
 
 function parseDevice(device: string): string{
     device = sanitizeString(device);
-    if(device === 'luces' || device === 'luz' || device === 'foco' || device === 'focos'){
+
+    if(strIncludes(device, 'luces', 'luz', 'foco')){
         return 'luces';
-    } else if(device === 'aire' || device === 'aires' || device === 'aire acondicionado' || device === 'aires acondicionado' || device === 'aire acondicionados' || device === 'aires acondicionados'){
+    } else if (strIncludes(device, 'aire', 'acondicionado')){
         return 'aires acondicionados';
-    } else if(device === 'puerta' || device === 'puertas'){
-        return 'puertas';
+    } else if (strIncludes(device, 'puerta', 'entrada')){
+        'puertas';
     }
 
     throw new Error('device not found');
@@ -59,9 +62,9 @@ function parseLocation(location: string, number: string){
 
     location = sanitizeString(location);
 
-    if(location === 'centro de computo' || location === 'centros de computo' || location === 'centro de computos' || location === 'centro de computador' || location === 'centros de computador'){
+    if(strIncludes(location, 'centro de', 'computo', 'computa')){
         return 'centro de cómputo ' + number;
-    } else if(location === 'aula' || location === 'aulas'){
+    } else if(strIncludes(location, 'aula', 'sala')){
         return 'aula ' + number;
     }
 
@@ -75,4 +78,14 @@ function sanitizeString(word: string): string{
 function isOnlyNumbers(word: string){
     const isNumeric = new RegExp(/^[0-9]+$/);
     return isNumeric.test(word);
+}
+
+function strIncludes(str: string, ...includes: string[]): boolean{
+    for(let i = 0; i < includes.length; i++){
+        if(str.indexOf(includes[i]) > -1){
+            return true;
+        }
+    }
+    
+    return false;
 }
