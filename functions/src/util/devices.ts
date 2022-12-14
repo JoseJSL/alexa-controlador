@@ -1,61 +1,59 @@
-interface Device{
+interface Device {
     [key: string]: {
-        PIN: number,
-    }
+        PIN: number;
+    };
 }
 
-interface Locations{
-    [key: string]:{
+interface Locations {
+    [key: string]: {
         Devices: Device;
-    }
+    };
 }
 
 export const LocationList: Locations = {
-    ['centro de cómputo 1']: {
+    ["centro de cómputo 1"]: {
         Devices: {
-            ['luces']: {PIN: 27},
-            ['puertas']: {PIN: 2},
-            ['aires acondicionados']: {PIN: 3},
-        }
+            ["luces"]: { PIN: 27 },
+            ["puertas"]: { PIN: 2 },
+            ["aires acondicionados"]: { PIN: 3 },
+        },
     },
 
-    ['centro de cómputo 2']: {
+    ["centro de cómputo 2"]: {
         Devices: {
-            ['luces']: {PIN: 4},
-            ['puertas']: {PIN: 5},
-            ['aires acondicionados']: {PIN: 6},
-        }
-    },
-    
-
-    ['aula 8']: {
-        Devices: {
-            ['luces']: {PIN: 7},
-            ['puertas']: {PIN: 8},
-            ['aires acondicionados']: {PIN: 9},
-        }   
+            ["luces"]: { PIN: 4 },
+            ["puertas"]: { PIN: 5 },
+            ["aires acondicionados"]: { PIN: 6 },
+        },
     },
 
-    ['aula 1']: {
+    ["aula 8"]: {
         Devices: {
-            ['luces']: {PIN: 2},
-        }   
+            ["luces"]: { PIN: 7 },
+            ["puertas"]: { PIN: 8 },
+            ["aires acondicionados"]: { PIN: 9 },
+        },
     },
 
-    ['aula 9']: {
+    ["aula 1"]: {
         Devices: {
-            ['luces']: {PIN: 10},
-            ['puertas']: {PIN: 11},
-            ['aires acondicionados']: {PIN: 12},
-        }   
+            ["luces"]: { PIN: 2 },
+        },
     },
 
-    ['aula 10']: {
+    ["aula 9"]: {
         Devices: {
-            ['luces']: {PIN: 13},
-            ['puertas']: {PIN: 14},
-            ['aires acondicionados']: {PIN: 15},
-        }   
+            ["luces"]: { PIN: 10 },
+            ["puertas"]: { PIN: 11 },
+            ["aires acondicionados"]: { PIN: 12 },
+        },
     },
-}
 
+    ["aula 10"]: {
+        Devices: {
+            ["luces"]: { PIN: 13 },
+            ["puertas"]: { PIN: 14 },
+            ["aires acondicionados"]: { PIN: 15 },
+        },
+    },
+};
