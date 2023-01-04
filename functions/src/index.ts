@@ -15,7 +15,7 @@ import { ActivateIntent } from "./controls/activate-request";
 import { DeactivateIntent } from "./controls/deactivate-request";
 import {
     ClassQuestionIntent,
-    GeneralQuestionIntent,
+    GeneralNextQuestionIntent,
     ScheduleQuestionIntent,
     TeacherQuestionIntent,
 } from "./controls/question-request";
@@ -31,7 +31,7 @@ const skill = SkillBuilders.custom()
         ClassQuestionIntent,
         TeacherQuestionIntent,
         ScheduleQuestionIntent,
-        GeneralQuestionIntent
+        GeneralNextQuestionIntent
     )
     .addErrorHandlers(errorHandler)
     .create();
